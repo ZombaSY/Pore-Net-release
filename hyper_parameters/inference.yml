@@ -1,0 +1,23 @@
+{
+ mode: inference,
+ cuda: true,
+ pin_memory: true,
+ wandb: false,
+ worker: 1,
+ batch_size: 1,
+ project_name: 'Pore',
+ CUDA_VISIBLE_DEVICES: '0',
+
+ model_name: 'CNN_pool_shallow',
+ input_size: [1280, 1024],
+ resolution: [1280, 1024],
+
+ inference_mode: 'mask',
+ threshold: 0.25,  # of range [0, 1]
+ model_path: '/path/to/your/model/torch.pt',
+
+ val_x_path: '/your/path/to/input',
+ val_y_path: '/your/path/to/label',
+
+ mask_path: '/your/path/to/roi_mask',
+}
