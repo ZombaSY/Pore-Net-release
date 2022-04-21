@@ -50,7 +50,6 @@ class Inferencer:
         self.image_std = self.loader_form.image_loader.image_std
 
     def start_inference_with_mask(self):
-
         self.metric.reset()
         tt_end = 0
         for batch_idx, (img, target) in enumerate(self.loader_val):
@@ -122,7 +121,7 @@ class Inferencer:
                 self.metric.update(target_np_masked, output_argmax_np_tmp_masked)
 
                 Image.fromarray(img).save(save_dir + img_id + '.png', quality=100)
-                Image.fromarray(output_argmax_np).save(save_dir + img_id + '_argmax.png', quality=100)
+                Image.fromarray(output_argmax_np * 255).save(save_dir + img_id + '_argmax.png', quality=100)
                 Image.fromarray(output_argmax_masked).save(save_dir + img_id + '_argmax_mask.png', quality=100)
                 Image.fromarray(output_heatmap).save(save_dir + img_id + '_heatmap.png', quality=100)
                 Image.fromarray(img_overlay).save(save_dir + img_id + '_overlay.png', quality=100)

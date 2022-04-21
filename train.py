@@ -57,7 +57,7 @@ class Trainer:
         self.num_batches_train = int(len(self.loader_train))
         self.num_batches_val = int(len(self.loader_val))
 
-        self.metric = utils.StreamSegMetrics(2)
+        self.metric = utils.StreamSegMetrics(self.args.num_class)
         self.metric_best = 0
         self.model_post_path = None
 

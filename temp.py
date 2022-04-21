@@ -44,7 +44,7 @@ def main():
     torch.manual_seed(0)
     np.random.seed(0)
     torch.backends.cudnn.benchmark = False
-    os.environ["CUDA_VISIBLE_DEVICES"] = '3'
+    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
     x = torch.rand(1, 3, 1280, 1024).cuda()
     # x2 = F.one_hot(torch.arange(0, 2), num_classes=36).cuda().float()
@@ -52,9 +52,9 @@ def main():
     y = torch.rand(1, 1, 1280, 1024)
     y = torch.where(y >= 0.5, torch.tensor(1), torch.tensor(0)).cuda()
 
-    model = model_hub.PoreNet_SC_H2().cuda()
+    model = model_hub.PoreNet_SC().cuda()
 
-    loss_criterion = loss_hub.FocalTverskyLoss().cuda()
+    loss_criterion = loss_hub.FocalBCELoss().cuda()
     # if self.args.criterion == 'MSE':
     #     loss = loss_hub.MSELoss().to(self.device)
     # elif self.args.criterion == 'BCE':
@@ -73,22 +73,17 @@ def main():
     optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()),
                                   lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
 
-    model.train()
-    for i in range(50):
-        optimizer.zero_grad()
-
-        out = model(x)
-        loss = loss_criterion(out, y)
-
-        print(loss)
-        # ---- backward ----
-        loss.backward()
-        optimizer.step()
-
-    # m = torch.jit.script(model)
-    # torch.jit.save(m, 'swin.pt')
-
-    # torch.save(model.state_dict(), 'MobNet.pt')
+    # model.train()
+    # for i in range(50):
+    #     optimizer.zero_grad()
+    #
+    #     out = model(x)
+    #     loss = loss_criterion(out, y)
+    #
+    #     print(loss)
+    #     # ---- backward ----
+    #     loss.backward()
+    #     optimizer.step()
 
     # from ptflops import get_model_complexity_info
     #
@@ -100,20 +95,20 @@ def main():
     #
     # summary(model.cuda(), (3, 1024, 1280))
 
-    # model.eval()
-    # t_sum = []
-    # for i in range(11):
-    #     optimizer.zero_grad()
-    #
-    #     tt = time.time()
-    #     _ = model(x)
-    #
-    #     if i >= 1:  # ignore first batch
-    #         t_sum.append(time.time() - tt)
-    #         # print(t_sum)
-    #
-    # print('mean:', np.array(t_sum).mean())
-    # print('max mem:', torch.cuda.max_memory_allocated())
+    model.eval()
+    t_sum = []
+    for i in range(100):
+        optimizer.zero_grad()
+
+        tt = time.time()
+        _ = model(x)
+
+        if i >= 1:  # ignore first batch
+            t_sum.append(time.time() - tt)
+            # print(t_sum)
+
+    print('mean:', np.array(t_sum).mean())
+    print('max mem:', torch.cuda.max_memory_allocated())
 
 
 if __name__ == '__main__':
