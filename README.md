@@ -15,3 +15,5 @@ bash bash_inference.sh
 ```
 
 The main packages can be found in 'requirements.txt'.
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
