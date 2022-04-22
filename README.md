@@ -13,3 +13,5 @@ To start inference your code, use
 ```bash
 bash bash_inference.sh
 ```
+
+The main packages can be found in 'requirements.txt'.
